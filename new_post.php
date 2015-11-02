@@ -29,7 +29,9 @@
       }
 
       // Try and save post - store outcome
-      $query = "INSERT INTO posts (user_id, title, body) VALUES ('$user_id', '$title', '$body')";
+      $query = "INSERT INTO posts (user_id, title, body) VALUES ('$user_id', '" .
+               $connection->escape_string($title) . "', '" .
+               $connection->escape_string($body) . "')";
       $post_success = $connection->query($query);
       if ($post_success) {
         // If post succeeded redirect to index - otherwise remain on this page to see error message
@@ -103,8 +105,8 @@
           <h1 class = "title">New post</h1>
           <?php
             if (isset($post_success) && !$post_success) {
-              echo "<div class = \"alert alert-error\">" .
-                    "<p>There was an error trying to save your post. Please contact the site administrator.</p>" .
+              echo "<div class = \"alert alert-danger\">" .
+                    "<p>There was an error trying to save your post: $connection->error</p>" .
                   "</div>";
             }
           ?>
